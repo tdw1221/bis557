@@ -11,4 +11,5 @@
 #' @export
 linear_model <- function(formula, data) {
   # Your code here.
+  return(lm(formula = formula, data = data))
 }
