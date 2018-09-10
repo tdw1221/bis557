@@ -7,8 +7,7 @@
 #' @rdname lm_patho
 #' @description In homework 1 we explore the effect of numerical instability
 #' on linear regressions. This data set gives us a basis for exploration.
-NULL
-
+'lm_patho'
 
 #' A data set for the first homework
 #'
@@ -24,4 +23,4 @@ NULL
 #' @source \url{http://www.diamondse.info/}
 "diamonds"
 
-document()
+
