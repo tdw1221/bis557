@@ -11,7 +11,31 @@
 #' @export
 linear_model <- function(formula, data) {
   # Your code here.
-  return(lm(formula = formula, data = data))
+  linear_model <- function (formula, data) {
+    y <- model.frame(formula, data)[,1]
+    X <- model.matrix(formula, data)
+    
+    rvars <- colnames(X)
+    omit <- rownames(alias(formula, data)$Complete)
+    X <- X[, setdiff(rvars, omit)]
+
+    QR <- qr(X)
+    Q <- qr.Q(QR)
+    R <- qr.R(QR)
+
+    coeff <- backsolve(R, t(Q) %*% y)[,1]
+    names(coeff) <- setdiff(rvars, omit)
+    beta_hat <- sapply(rvars, function (x) {coeff[match(x, names(coeff))]})
+    names(beta_hat) <- rvars
+    beta_hat <- list(coefficients = beta_hat)
+    class(beta_hat) <- "lm"
+
+    # beta_hat <- list(call = match.call(), coefficients = beta_hat)
+    # beta_hat <- list(call = match.call(), coefficients = coeff)
+    # beta_hat
+    
+    return(beta_hat)
+}
 }
 
 
