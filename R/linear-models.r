@@ -4,16 +4,16 @@
 #' @description This function passes parameters to the lm function.
 #' @param formula a formula
 #' @param data a data.frame
+#' @import stats
 #' @return An lm object
 #' @examples
-#' fit <- linear_model(Sepal.Length ~., iris)
-#' summary(fit)
 #' @export
-linear_model <- function(formula, data) {
+
+
   # Your code here.
   linear_model <- function (formula, data) {
-    y <- model.frame(formula, data)[,1]
-    X <- model.matrix(formula, data)
+    y <- stats::model.frame(formula, data)[,1]
+    X <- stats::model.matrix(formula, data)
     
     rvars <- colnames(X)
     omit <- rownames(alias(formula, data)$Complete)
@@ -36,7 +36,7 @@ linear_model <- function(formula, data) {
     
     return(beta_hat)
 }
-}
+
 
 
 
