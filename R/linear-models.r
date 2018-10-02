@@ -1,40 +1,28 @@
-
 #' Fit a linear model
 #'
 #' @description This function passes parameters to the lm function.
 #' @param formula a formula
 #' @param data a data.frame
-#' @import stats
 #' @return An lm object
+#' @importFrom stats lm
 #' @examples
+#' fit <- linear_model(Sepal.Length ~., iris)
+#' summary(fit)
 #' @export
-
-
-  # Your code here.
-  linear_model <- function (formula, data) {
-    y <- stats::model.frame(formula, data)[,1]
-    X <- stats::model.matrix(formula, data)
+linear_model <- function(formula, data) {
+  X = model.matrix(formula, data)
+  Y= model.frame(formula,data)[,1]
+  beta <- qr.solve(X,Y)
+  for (i in 1:length(beta)){
+    if (beta[i] == 0)
+      beta[i] = NA
     
-    rvars <- colnames(X)
-    omit <- rownames(alias(formula, data)$Complete)
-    X <- X[, setdiff(rvars, omit)]
-
-    QR <- qr(X)
-    Q <- qr.Q(QR)
-    R <- qr.R(QR)
-
-    coeff <- backsolve(R, t(Q) %*% y)[,1]
-    names(coeff) <- setdiff(rvars, omit)
-    beta_hat <- sapply(rvars, function (x) {coeff[match(x, names(coeff))]})
-    names(beta_hat) <- rvars
-    beta_hat <- list(coefficients = beta_hat)
-    class(beta_hat) <- "lm"
-
-    # beta_hat <- list(call = match.call(), coefficients = beta_hat)
-    # beta_hat <- list(call = match.call(), coefficients = coeff)
-    # beta_hat
-    
-    return(beta_hat)
+  }
+  ret <- list()
+  ret$coefficients = c(beta)
+  ret$call = paste("lm(formula = ", format(formula), ",data = ", deparse(substitute(data)),")", sep = "")
+  class(ret) = "lm"
+  return(ret)
 }
 
 
